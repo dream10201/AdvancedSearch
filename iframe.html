@@ -8,40 +8,38 @@
 这是iframe里面
 <button id="ifbtn">iframe调用示例</button>
 <script>
-    var f_win = window.parent;
     var btn = document.getElementById("ifbtn");
-    var as = null;
-    as = f_win.AsSearch(btn, {
-        columns: [
-            {
-                title: "性别",
-                code: "sex",
-                type: "select",
-                explanation: {"男": "1", "女": "0"},
-            }
-            , {
-                title: "姓名",
-                code: "name",
-                type: "txt"
-            }
-            , {
-                title: "时间",
-                code: "date",
-                type: "date",
-                dateformat: "yyyy-MM-dd"
-            }
-            , {
-                title: "姓氏",
-                code: "xs",
-                type: "txt"
-            }],
-        search: function (result) {
-            alert("结果：\n" + JSON.stringify(result));
-            console.log("结果：" + JSON.stringify(result));
-        },
-        shadeEnable: false,
-        dateInput: function (obj, dateFormat) {
-            //data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1"
+    var as = window.parent.AsSearch(btn, {
+            columns: [
+                {
+                    title: "性别",
+                    code: "sex",
+                    type: "select",
+                    explanation: {"男": "1", "女": "0"},
+                }
+                , {
+                    title: "姓名",
+                    code: "name",
+                    type: "txt"
+                }
+                , {
+                    title: "时间",
+                    code: "date",
+                    type: "date",
+                    dateformat: "yyyy-MM-dd"
+                }
+                , {
+                    title: "姓氏",
+                    code: "xs",
+                    type: "txt"
+                }],
+            search: function (result) {
+                alert("结果：\n" + JSON.stringify(result));
+                console.log("结果：" + JSON.stringify(result));
+            },
+            shadeEnable: false,
+            dateInput: function (obj, dateFormat) {
+                //data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1"
 //            $(obj).attr({"data-date-format": "yyyy-MM-dd HH:MM:SS"});
 //            $(obj).datetimepicker({
 //                //language:  'fr',
@@ -53,8 +51,8 @@
 //                forceParse: 0,
 //                showMeridian: 1
 //            });
-        }
-    });
+            }
+        });
 </script>
 </body>
 </html>
