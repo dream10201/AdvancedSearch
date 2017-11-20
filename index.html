@@ -8,7 +8,8 @@
 </head>
 <body>
 <button id="btn1" style="width:100px;height:50px;margin-left:calc(50% - 160px);margin-top:200px;color:red;">Test-1</button>
-<button id="btn2" style="width:100px;height:50px;color:red;">Test-2</button>
+<!--<button id="btn2" style="width:100px;height:50px;color:red;">Test-2</button>-->
+<iframe src="./iframe.html" frameborder="0"></iframe>
 <script type="text/javascript">
     var as = new AsSearch("#btn1", {
         columns: [
@@ -54,50 +55,50 @@
 //            });
         }
     });
-    var as = new AsSearch("#btn2", {
-        columns: [
-            {
-                title: "性别",
-                code: "sex",
-                type: "select",
-                explanation: {"男": "1", "女": "0"},
-            }
-            , {
-                title: "姓名",
-                code: "name",
-                type: "txt"
-            }
-            , {
-                title: "时间",
-                code: "date",
-                type: "date",
-                dateformat:"yyyy-MM-dd"
-            }
-            , {
-                title: "姓氏",
-                code: "xs",
-                type: "txt"
-            }],
-        search: function(result){
-            alert("结果：\n"+JSON.stringify(result));
-            console.log("结果："+ JSON.stringify(result));
-        },
-        shadeEnable:false,
-        dateInput: function (obj,dateFormat) {
-            //data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1"
-//            $(obj).attr({"data-date-format": "yyyy-MM-dd HH:MM:SS"});
-//            $(obj).datetimepicker({
-//                //language:  'fr',
-//                weekStart: 1,
-//                todayBtn: 1,
-//                autoclose: 1,
-//                todayHighlight: 1,
-//                startView: 2,
-//                forceParse: 0,
-//                showMeridian: 1
-//            });
-        }
-    });
+//    var as = new AsSearch("#btn2", {
+//        columns: [
+//            {
+//                title: "性别",
+//                code: "sex",
+//                type: "select",
+//                explanation: {"男": "1", "女": "0"},
+//            }
+//            , {
+//                title: "姓名",
+//                code: "name",
+//                type: "txt"
+//            }
+//            , {
+//                title: "时间",
+//                code: "date",
+//                type: "date",
+//                dateformat:"yyyy-MM-dd"
+//            }
+//            , {
+//                title: "姓氏",
+//                code: "xs",
+//                type: "txt"
+//            }],
+//        search: function(result){
+//            alert("结果：\n"+JSON.stringify(result));
+//            console.log("结果："+ JSON.stringify(result));
+//        },
+//        shadeEnable:false,
+//        dateInput: function (obj,dateFormat) {
+//            //data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1"
+////            $(obj).attr({"data-date-format": "yyyy-MM-dd HH:MM:SS"});
+////            $(obj).datetimepicker({
+////                //language:  'fr',
+////                weekStart: 1,
+////                todayBtn: 1,
+////                autoclose: 1,
+////                todayHighlight: 1,
+////                startView: 2,
+////                forceParse: 0,
+////                showMeridian: 1
+////            });
+//        }
+//    });
 </script>
 </body>
 </html>
