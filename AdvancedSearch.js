@@ -1,6 +1,7 @@
 ;(function (window, document) {//$,window, document
     var defaultOptions = {
         size: [700, 400],//初始弹窗宽、高
+        shadeEnable:true,//遮罩层开关
         shade: ["#000", 0.3],//遮罩层，黑色0.3透明度
         shadeClose: false,//点击遮罩层是否关闭
         shadeZindex: 1000000,//遮罩层z-index，弹窗默认+1
@@ -15,7 +16,7 @@
         dateInput: function (obj, dateformat) {
         }//input -> date回调
     };
-    var newOptions;//newOptions -> 用于存储合并后的options
+    var newOptions=null,asSearch=null;//newOptions -> 用于存储合并后的options
 
     /**
      * 用于参数合并
@@ -39,18 +40,18 @@
     var isMove = false, x, y;
 
     function FormMove() {
-        var advancedsearch = document.getElementById("advancedsearch");
+        var advancedsearch = asSearch.advancedsearch;
         var getstyle = window.getComputedStyle(advancedsearch, null);
         //标题栏，监听鼠标移入
-        document.getElementById("advancedsearch_title").addEventListener("mousedown", function (e) {
+        asSearch.advancedsearch_title.addEventListener("mousedown", function (e) {
             x = e.clientX;
             y = e.clientY;
             isMove = true;
         }, false);
-        document.addEventListener("mouseup", function () {
+        asSearch.advancedsearch.addEventListener("mouseup", function () {
             isMove = false;
         }, false);
-        document.addEventListener("mousemove", function (e) {
+        asSearch.advancedsearch.addEventListener("mousemove", function (e) {
             if (isMove) {
                 //移动窗体
                 var mx = e.clientX;
@@ -362,12 +363,12 @@
      * @constructor
      */
     function ControlEvent() {
-        document.getElementById("advancedsearch_add_btn").addEventListener("click", function () {
-            document.getElementById("advancedsearch_content").appendChild(CreateSelectDom());
+        asSearch.advancedsearch_add_btn.addEventListener("click", function () {
+            asSearch.advancedsearch_content.appendChild(CreateSelectDom());
         });
-        document.getElementById("advancedsearch_add_search").addEventListener("click", function () {
+        asSearch.advancedsearch_add_search.addEventListener("click", function () {
             //整理所有结果(普通结果)
-            var inputs = document.querySelectorAll(".advancedsearch_content_row_right input.advancedsearch_ordinary");
+            var inputs = asSearch.advancedsearch.querySelectorAll(".advancedsearch_content_row_right input.advancedsearch_ordinary");
             var result = [];
             for (var i = 0; i < inputs.length; i++) {
                 var input = inputs[i];
@@ -388,7 +389,7 @@
                 }
             }
             //区间
-            var dateInputBox = document.querySelectorAll(".advancedsearch_content_row_right .advancedsearch_content_row_right_box");
+            var dateInputBox = asSearch.advancedsearch.querySelectorAll(".advancedsearch_content_row_right .advancedsearch_content_row_right_box");
             for (var j = 0; j < dateInputBox.length; j++) {
                 var dates = dateInputBox[j].childNodes;//获取子元素集合
                 var interval = "",obj={};
@@ -413,7 +414,7 @@
      * @constructor
      */
     function CloseEvent() {
-        document.getElementById("advancedsearch_close").addEventListener("click", function () {
+        asSearch.advancedsearch_close.addEventListener("click", function () {
             hide();
             newOptions.close();//退出回调
         });
@@ -423,16 +424,22 @@
      * 隐藏窗体
      */
     function hide() {
-        document.getElementById("advancedsearch_cover").style.display = "none";
-        document.getElementById("advancedsearch").style.display = "none";
+        if(newOptions.shadeEnable){
+            asSearch.advancedsearch_cover.style.display = "none";
+        }
+        // document.getElementById("advancedsearch").style.display = "none";
+        asSearch.advancedsearch.style.display="none";
     }
 
     /**
      * 显示窗体
      */
     function show() {
-        document.getElementById("advancedsearch_cover").style.display = "block";
-        document.getElementById("advancedsearch").style.display = "block";
+        if(newOptions.shadeEnable){
+            asSearch.advancedsearch_cover.style.display = "block";
+        }
+        // document.getElementById("advancedsearch").style.display = "block";
+        asSearch.advancedsearch.style.display="block";
     }
 
     /**
@@ -441,28 +448,28 @@
      */
     function DefaultBox() {
         var advancedsearch_cover = document.createElement("div");
-        advancedsearch_cover.id = "advancedsearch_cover";
+        advancedsearch_cover.className = "advancedsearch_cover";
         var advancedsearch = document.createElement("div");
-        advancedsearch.id = "advancedsearch";
+        advancedsearch.className = "advancedsearch";
         var advancedsearch_title = document.createElement("div");
-        advancedsearch_title.id = "advancedsearch_title";
+        advancedsearch_title.className = "advancedsearch_title";
         var advancedsearch_title_txt = document.createElement("div");
-        advancedsearch_title_txt.id = "advancedsearch_title_txt";
+        advancedsearch_title_txt.className = "advancedsearch_title_txt";
         var advancedsearch_title_txt_span = document.createElement("span");
-        advancedsearch_title_txt_span.id = "advancedsearch_title_txt_span";
+        advancedsearch_title_txt_span.className = "advancedsearch_title_txt_span";
         var advancedsearch_close = document.createElement("div");
-        advancedsearch_close.id = "advancedsearch_close";
+        advancedsearch_close.className = "advancedsearch_close";
         var span = document.createElement("span");
         span.innerHTML = "X";
         var advancedsearch_content = document.createElement("div");
-        advancedsearch_content.id = "advancedsearch_content";
+        advancedsearch_content.className = "advancedsearch_content";
         var advancedsearch_control = document.createElement("div");
-        advancedsearch_control.id = "advancedsearch_control";
+        advancedsearch_control.className = "advancedsearch_control";
         var advancedsearch_add_btn = document.createElement("button");
-        advancedsearch_add_btn.id = "advancedsearch_add_btn";
+        advancedsearch_add_btn.className = "advancedsearch_add_btn";
         advancedsearch_add_btn.innerHTML = "Add";
         var advancedsearch_add_search = document.createElement("button");
-        advancedsearch_add_search.id = "advancedsearch_add_search";
+        advancedsearch_add_search.className = "advancedsearch_add_search";
         advancedsearch_add_search.innerHTML = "Search";
         //组装
         advancedsearch.appendChild(advancedsearch_title);
@@ -476,6 +483,14 @@
         advancedsearch_control.appendChild(advancedsearch_add_search);
         document.querySelector("body").appendChild(advancedsearch_cover);
         document.querySelector("body").appendChild(advancedsearch);
+        asSearch.advancedsearch=advancedsearch;
+        asSearch.advancedsearch_title_txt_span=advancedsearch_title_txt_span;
+        asSearch.advancedsearch_content=advancedsearch_content;
+        asSearch.advancedsearch_close=advancedsearch_close;
+        asSearch.advancedsearch_cover=advancedsearch_cover;
+        asSearch.advancedsearch_title=advancedsearch_title;
+        asSearch.advancedsearch_add_btn=advancedsearch_add_btn;
+        asSearch.advancedsearch_add_search=advancedsearch_add_search;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -494,31 +509,40 @@
         var _o = newOptions = this.options = merge(defaultOptions, options);
         //默认界面
         var view = "";
+        this.advancedsearch=null;
+        this.advancedsearch_cover=null;
+        this.advancedsearch_title_txt_span=null;
+        this.advancedsearch_content=null;
+        asSearch=this;
         this.init();
     }
     AsSearch.prototype = {
         init: function () {
             var options = this.options;
             //检查框架是否存在
-            if (!document.getElementById("advancedsearch")) {
+            if (!asSearch.advancedsearch) {
                 DefaultBox();
             }
             //配置标题
-            document.getElementById("advancedsearch_title_txt_span").innerHTML = options.title;
+            asSearch.advancedsearch_title_txt_span.innerHTML = options.title;
             //z-index配置
-            document.getElementById("advancedsearch").style.zIndex = options.shadeZindex + 1;
-            document.getElementById("advancedsearch_cover").style.zIndex = options.shadeZindex;
+            asSearch.advancedsearch.style.zIndex = options.shadeZindex + 1;
+            asSearch.advancedsearch_cover.style.zIndex = options.shadeZindex;
+            //遮罩层点击事件
+            if(options.shadeClose){
+
+            }
             //窗体大小及位置
-            var advancedsearch = document.getElementById("advancedsearch");
+            var advancedsearch = this.advancedsearch;
             advancedsearch.style.width = options.size[0] / 16 + "rem";
             advancedsearch.style.height = options.size[1] / 16 + "rem";
             advancedsearch.style.left = "calc(50% - " + (this.options.size[0] / 16 / 2) + "rem)";
             advancedsearch.style.top = "calc(50% - " + (this.options.size[1] / 16 / 2) + "rem)";
             //遮罩层颜色及透明度
-            document.getElementById("advancedsearch_cover").style.backgroundColor = options.shade[0];
-            document.getElementById("advancedsearch_cover").style.opacity = options.shade[1];
+            asSearch.advancedsearch_cover.style.backgroundColor = options.shade[0];
+            asSearch.advancedsearch_cover.style.opacity = options.shade[1];
             //添加默认条件
-            document.getElementById("advancedsearch_content").appendChild(CreateSelectDom());
+            asSearch.advancedsearch_content.appendChild(CreateSelectDom());
             //初始化事件监听
             this.event();
         },
@@ -537,8 +561,8 @@
         },
         remove: function () {
             //清理痕迹
-            document.querySelector("body").removeChild(document.getElementById("advancedsearch_cover"));
-            document.querySelector("body").removeChild(document.getElementById("advancedsearch"));
+            document.querySelector("body").removeChild(asSearch.advancedsearch_cover);
+            document.querySelector("body").removeChild(asSearch.advancedsearch);
         },
         /**
          * 重新渲染

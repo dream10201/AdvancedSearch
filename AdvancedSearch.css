@@ -11,14 +11,14 @@ html{
 .advancedsearch_content_row_close{
     color: rgba(12,12,12,0.4);
 }
-#advancedsearch_title_txt_span{
+.advancedsearch_title_txt_span{
     color: #323232!important;
     font-size: 20px!important;
 }
-#advancedsearch_title_txt{
+.advancedsearch_title_txt{
     /*display: none;*/
 }
-#advancedsearch * {
+.advancedsearch * {
     -webkit-box-sizing:content-box;
     box-sizing:content-box;
     transition: 1.75s;
@@ -31,23 +31,23 @@ html{
     /*font-family: "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "\9ED1\4F53", Arial, sans-serif;*/
 }
 
-#advancedsearch a, button {
+.advancedsearch a, button {
     cursor: pointer;
     background-color: #fff;
 }
 
-#advancedsearch a, button:hover {
+.advancedsearch a, button:hover {
     background-color: #e3e3e3;
     opacity: .8;
 }
-#advancedsearch > div {
+.advancedsearch > div {
     width: 100%;
 }
 
 /**
     主盒子
 */
-#advancedsearch {
+.advancedsearch {
     display: none;
     -webkit-box-sizing:content-box;
     box-sizing:content-box;
@@ -69,7 +69,7 @@ html{
 /**
     标题盒子
  */
-#advancedsearch_title {
+.advancedsearch_title {
     height: 2.625rem;
     margin-bottom:0.3125rem;
     /*background-color: #F8F8F8;*/
@@ -81,7 +81,7 @@ html{
 /**
     内容盒子
  */
-#advancedsearch_content {
+.advancedsearch_content {
     height: calc(100% - (2.625rem + 0.3125rem + 3.125rem));
     overflow: hidden;
     overflow-y: auto;
@@ -89,13 +89,10 @@ html{
    border-bottom: 1px solid #dedede;
     padding-left: 0.5rem;
 }
-.advancedsearch_val{
-    margin-left:0.2rem;
-}
 /**
     遮罩层
 */
-#advancedsearch_cover {
+.advancedsearch_cover {
     display: none;
     background-color: #0C0C0C;
     opacity: .2;
@@ -110,7 +107,7 @@ html{
 /**
     底部控制盒子
  */
-#advancedsearch_control {
+.advancedsearch_control {
     height: 3.125rem;
     background-color: #fff;
     text-align: right;
@@ -120,19 +117,19 @@ html{
 /*-------------------------------------------------整体框架^-------------------------------------------------------*/
 
 /*-------------------------------------------------标题部分v-------------------------------------------------------*/
-#advancedsearch_title > div {
+.advancedsearch_title > div {
     height:  2.625rem;
     line-height:  2.625rem;
     float: left;
     /*font-weight: bold;*/
 }
 
-#advancedsearch_title_txt {
+.advancedsearch_title_txt {
     width: calc((100% -  2.625rem) - ((100% -  2.625rem) / 10));
     /*padding-left: calc((100% -  2.625rem) / 10);*/
     padding-left: 0.7rem;
 }
-#advancedsearch_title *{
+.advancedsearch_title *{
     cursor: move;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Chrome/Safari/Opera */
@@ -143,7 +140,7 @@ html{
     /* Non-prefixed version, currently
    not supported by any browser */
 }
-#advancedsearch_close {
+.advancedsearch_close {
     font-weight:bold;
     width: 2.625rem;
     cursor: pointer;
@@ -151,11 +148,11 @@ html{
     float:right;
     /*margin-left:calc(100% - ((100% - 4.2rem) - ((100% - 4.2rem) / 10)) - 4.2rem);*/
 }
-#advancedsearch_add_search{
+.advancedsearch_add_search{
     background: #1e90ff;
     color: white;
 }
-#advancedsearch_close>span {
+.advancedsearch_close>span {
     position: absolute;
     top:-0.2rem;
     right:0.7rem;
@@ -167,7 +164,7 @@ html{
 
 /*-------------------------------------------------标题部分^-------------------------------------------------------*/
 /*-------------------------------------------------底部控制v-------------------------------------------------------*/
-#advancedsearch_control > button {
+.advancedsearch_control > button {
     width: 6rem;
     height: 1.85rem;//1.85rem
     line-height: normal;
