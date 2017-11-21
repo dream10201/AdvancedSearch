@@ -1,7 +1,7 @@
 # AdvancedSearch
 
 这是一个data table的多条件查询插件，简而言之就是可以将所有字段作为条件查询
-
+![示例](iframe.gif)
 # 使用
 
 ## 第一步

@@ -2,32 +2,23 @@
 /**
     框架整体
  */
-html{
-    font-size: medium;
-}
 .advancedsearch_content_row_left dl dd:hover,.advancedsearch_content_row_right dl dd:hover{
     background: #1e90ff;
 }
 .advancedsearch_content_row_close{
     color: rgba(12,12,12,0.4);
 }
-.advancedsearch_title_txt_span{
-    color: #323232!important;
-    font-size: 20px!important;
-}
-.advancedsearch_title_txt{
-    /*display: none;*/
-}
+/*主盒子*/
 .advancedsearch * {
-    -webkit-box-sizing:content-box;
-    box-sizing:content-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
     transition: 1.75s;
     -moz-transition: 1.75s; /* Firefox 4 */
     -webkit-transition: 1.75s; /* Safari 和 Chrome */
     -o-transition: 1.75s; /* Opera */
     text-decoration: none;
     text-overflow: ellipsis;
-    font-size: 16px;
+    font-size: 14px;
     /*font-family: "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "\9ED1\4F53", Arial, sans-serif;*/
 }
 
@@ -49,45 +40,41 @@ html{
 */
 .advancedsearch {
     display: none;
-    -webkit-box-sizing:content-box;
-    box-sizing:content-box;
-    width: 50rem;
-    height: 37.5rem;
-    font-size: 16px;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    width: 700px;
+    height: 400px;
+    font-size: 14px;
     overflow: hidden;
     background-color: #fff;
     margin: 0 auto;
     border-radius: 5px;
-    border: 0.0625rem solid #dedede;
+    border: 1px solid #dedede;
     position: fixed;
     left: 0;
     top: 0;
     z-index: 1000001;
-    padding-bottom: 1.2rem;
 }
 
 /**
     标题盒子
  */
 .advancedsearch_title {
-    height: 2.625rem;
-    margin-bottom:0.3125rem;
-    /*background-color: #F8F8F8;*/
+    height: 40px;
     cursor: move;
     border-bottom: 1px solid #dedede;
-    padding: 0.4rem 0;
 }
 
 /**
     内容盒子
  */
 .advancedsearch_content {
-    height: calc(100% - (2.625rem + 0.3125rem + 3.125rem));
+    height: calc(100% - 50px - 40px);
     overflow: hidden;
     overflow-y: auto;
     background-color: #fff;
-   border-bottom: 1px solid #dedede;
-    padding-left: 0.5rem;
+    border-bottom: 1px solid #dedede;
+    padding: 10px;
 }
 /**
     遮罩层
@@ -108,26 +95,32 @@ html{
     底部控制盒子
  */
 .advancedsearch_control {
-    height: 3.125rem;
+    height: 50px;
     background-color: #fff;
     text-align: right;
-    padding-top: 1rem;
 }
 
 /*-------------------------------------------------整体框架^-------------------------------------------------------*/
 
 /*-------------------------------------------------标题部分v-------------------------------------------------------*/
 .advancedsearch_title > div {
-    height:  2.625rem;
-    line-height:  2.625rem;
-    float: left;
-    /*font-weight: bold;*/
+    height:  40px;
+    font-weight: bold;
+    display: inline-block;
 }
-
 .advancedsearch_title_txt {
-    width: calc((100% -  2.625rem) - ((100% -  2.625rem) / 10));
-    /*padding-left: calc((100% -  2.625rem) / 10);*/
-    padding-left: 0.7rem;
+    width: calc(100% - 45px);
+    font-weight: normal;
+    padding:10px;
+}
+.advancedsearch_close {
+    position: relative;
+    right: 0px;
+    line-height:  40px;
+    z-index: 1;
+    width: 40px;
+    cursor: pointer;
+    text-align: center;
 }
 .advancedsearch_title *{
     cursor: move;
@@ -140,80 +133,70 @@ html{
     /* Non-prefixed version, currently
    not supported by any browser */
 }
-.advancedsearch_close {
-    font-weight:bold;
-    width: 2.625rem;
-    cursor: pointer;
-    text-align: center;
-    float:right;
-    /*margin-left:calc(100% - ((100% - 4.2rem) - ((100% - 4.2rem) / 10)) - 4.2rem);*/
-}
 .advancedsearch_add_search{
     background: #1e90ff;
     color: white;
 }
 .advancedsearch_close>span {
-    position: absolute;
-    top:-0.2rem;
-    right:0.7rem;
     cursor: pointer;
-    color: rgba(12,12,12,0.4);
-
-    /*margin-left:calc(100% - ((100% - 4.2rem) - ((100% - 4.2rem) / 10)) - 4.2rem);*/
+    margin-left:calc(100% - ((100% - 4.2rem) - ((100% - 4.2rem) / 10)) - 4.2rem);
 }
 
 /*-------------------------------------------------标题部分^-------------------------------------------------------*/
 /*-------------------------------------------------底部控制v-------------------------------------------------------*/
 .advancedsearch_control > button {
-    width: 6rem;
-    height: 1.85rem;//1.85rem
+    width: 95px;
+    height: 30px;
     line-height: normal;
-    margin: 0 1rem 0 1rem;
+    margin: 10px 16px 0 16px;
     border: 1px solid #dedede;
-    border-radius: 0.2rem;
+    border-radius: 5px;
 }
 
 /*-------------------------------------------------底部控制^-------------------------------------------------------*/
-/*-------------------------------------------------内容条v---------------------------------------------------------*/
+/*-----------------------px--------------------------内容条v---------------------------------------------------------*/
 .advancedsearch_content_row {
-    width: calc(100% - 1.25rem);
-    margin:0.625rem;
-    height:1.875rem;
+    width: 100%;
+    height:34px;
     letter-spacing: -4px;
-}
-
-.advancedsearch_content_row input{
-    width:calc(100% - 1.125rem);
-    height:calc(100% - 1.125rem);
-    padding:0.5rem;
-    border:1px solid #d2d2d2;
-    border-radius: 3px;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-.advancedsearch_content_row input:focus {
-    border-color: #66afe9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-}
-.advancedsearch_content_row .advancedsearch_content_row_left{
-    width:21%;
-    margin-right: 1%;
-}
-.advancedsearch_content_row .advancedsearch_content_row_right{
-    width:calc((100% - 1.125rem) - 26% - 13px);
-    margin-right:0.5%;
+    margin-bottom: 10px;
 }
 .advancedsearch_content_row >div{
-    height:1.875rem;
+    height:100%;
     display: inline-block;
     vertical-align: top;
     border:0;
     letter-spacing: normal;
+    line-height: 34px;
+}
+.advancedsearch_content_row .advancedsearch_content_row_left{
+    width:calc(100% - 17px - 60% - 16px);
+    margin-right: 16px;
+}
+.advancedsearch_content_row .advancedsearch_content_row_right{
+    width:calc(100% - 17px - 40%);
+}
+.advancedsearch_content_row_close{
+    width:34px;
+    height:34px;
+    color: #0C0C0C;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+}
+.advancedsearch_content_row input{
+    width:100%;
+    height:34px;
+    padding-left:5px;
+    padding-right:5px;
+    border:1px solid #d2d2d2;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 .advancedsearch_content_row dl{
-    width:calc(100% - 2px);
-    max-height:20rem;
+    width:100%;
+    max-height:200px;
     border-radius:2px;
     box-shadow: 0 2px 4px rgba(0,0,0,.12);
     overflow-x: hidden;
@@ -230,36 +213,34 @@ html{
 .advancedsearch_content_row dd{
     margin-left:0;
     padding-left:10px;
-    height:1.875rem;
-    line-height: 1.875rem;
+    height:34px;
+    line-height: 34px;
     cursor: pointer;
 
 }
-.advancedsearch_content_row dd:hover{
-    background-color: #5FB878;
-}
+/*date input*/
 .advancedsearch_content_row_right_box{
     width:100%;
     height:100%;
 }
 .advancedsearch_content_row_right_box input{
-    width:calc((50% - 0.5625rem) - 20px);
+    vertical-align: top;
+    width:calc(50% - 10px);
 }
 .advancedsearch_content_row_right_box span{
     width:20px;
     overflow: hidden;
     display: inline-block;
-}
-.advancedsearch_content_row_close{
-    width:13px;
-    height:100%;
-    overflow: hidden;
-    cursor: pointer;
     text-align: center;
-    font-weight: bold;
-    float: right;
-    margin-right: 30px;
-    float:right;
+}
+.advancedsearch_content_row input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.advancedsearch_content_row dd:hover{
+    background-color: #5FB878;
 }
 
 /*-------------------------------------------------内容条^---------------------------------------------------------*/

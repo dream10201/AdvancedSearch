@@ -1,23 +1,4 @@
 ;(function (window, document) {//$,window, document
-    var defaultOptions = {
-        size: [700, 400],//初始弹窗宽、高
-        shadeEnable:true,//遮罩层开关
-        shade: ["#000", 0.3],//遮罩层，黑色0.3透明度
-        shadeClose: false,//点击遮罩层是否关闭
-        shadeZindex: 1000000,//遮罩层z-index，弹窗默认+1
-        title: "Advanced Search",//弹窗标题
-        columns: [],//下拉条件
-        success: function () {
-        },//弹出成功后回调
-        search: function (result) {
-        },//搜索按钮回调
-        close: function () {
-        },//关闭回调
-        dateInput: function (obj, dateformat) {
-        }//input -> date回调
-    };
-    var newOptions=null,asSearch=null;//newOptions -> 用于存储合并后的options
-
     /**
      * 用于参数合并
      * @param defaultOptions
@@ -37,21 +18,20 @@
      * 窗体移动事件绑定及处理代码
      * @constructor
      */
-    var isMove = false, x, y;
-
-    function FormMove() {
-        var advancedsearch = asSearch.advancedsearch;
+    function FormMove(d) {
+        var isMove = false, x, y;
+        var advancedsearch = d.view.advancedsearch;
         var getstyle = window.getComputedStyle(advancedsearch, null);
         //标题栏，监听鼠标移入
-        asSearch.advancedsearch_title.addEventListener("mousedown", function (e) {
+        d.view.advancedsearch_title.addEventListener("mousedown", function (e) {
             x = e.clientX;
             y = e.clientY;
             isMove = true;
         }, false);
-        asSearch.advancedsearch.addEventListener("mouseup", function () {
+        d.view.advancedsearch.addEventListener("mouseup", function () {
             isMove = false;
         }, false);
-        asSearch.advancedsearch.addEventListener("mousemove", function (e) {
+        d.view.advancedsearch.addEventListener("mousemove", function (e) {
             if (isMove) {
                 //移动窗体
                 var mx = e.clientX;
@@ -103,7 +83,7 @@
      * @returns {Element}
      * @constructor
      */
-    function CreateSelectVal(explanation, code,type,explanation) {
+    function CreateSelectVal(explanation, code, type, explanation, d) {
         var advancedsearch_content_row_right = document.createElement("div");
         advancedsearch_content_row_right.className = "advancedsearch_content_row_right";
         advancedsearch_content_row_right.dataset.align = "right";
@@ -114,9 +94,15 @@
         advancedsearch_select.className = "advancedsearch_select advancedsearch_ordinary";
 
         //检索框事件绑定
-        advancedsearch_select.addEventListener("focus", selectInput);
-        advancedsearch_select.addEventListener("blur", selectInput);
-        advancedsearch_select.addEventListener("input", selectInput);
+        advancedsearch_select.addEventListener("focus", function (event) {
+            selectInput(this, d, event);
+        });
+        advancedsearch_select.addEventListener("blur", function (event) {
+            selectInput(this, d, event);
+        });
+        advancedsearch_select.addEventListener("input", function (event) {
+            selectInput(this, d, event);
+        });
 
         explanation = JSON.parse(explanation);
         var dl = document.createElement("dl");
@@ -140,7 +126,7 @@
      * @returns {[null,null]}
      * @constructor
      */
-    function CreateInput(code,type) {
+    function CreateInput(code, type) {
         var advancedsearch_content_row_right = document.createElement("div");
         advancedsearch_content_row_right.className = "advancedsearch_content_row_right";
         advancedsearch_content_row_right.dataset.align = "right";
@@ -160,7 +146,7 @@
      * @returns {[null,null]}
      * @constructor
      */
-    function CreateDateInputs(code,type,dateformat) {
+    function CreateDateInputs(code, type, dateformat) {
         var advancedsearch_content_row_right = document.createElement("div");
         advancedsearch_content_row_right.className = "advancedsearch_content_row_right";
         advancedsearch_content_row_right.dataset.align = "right";
@@ -192,27 +178,27 @@
      * @param dd
      * @constructor
      */
-    function DynamicVal(dd) {
+    function DynamicVal(dd, d) {
         var dd_code = dd.dataset.code;
         var dd_type = dd.dataset.type;
         //得到row
         var row = dd.parentNode.parentNode.parentNode;
-        dd_type=dd_type.toLowerCase();
-        if (dd_type == "date" || dd_type=="timestamp" || dd_type=="datetime" || dd_type=="time") {
+        dd_type = dd_type.toLowerCase();
+        if (dd_type == "date" || dd_type == "timestamp" || dd_type == "datetime" || dd_type == "time") {
             //时间类型
-            var input = CreateDateInputs(dd_code,dd_type,dd.dataset.dateformat);
+            var input = CreateDateInputs(dd_code, dd_type, dd.dataset.dateformat);
             row.replaceChild(input[0], row.childNodes[1]);
-            newOptions.dateInput(input[1], dd.dataset.dateformat);//回调
+            d.options.dateInput(input[1], dd.dataset.dateformat);//回调
         } else {
             //下拉框或者普通文本类型
             if ((typeof dd.dataset.explanation) != "undefined" && dd.dataset.explanation != "") {
                 //下拉框
                 var explanation = dd.dataset.explanation;
                 //替换节点
-                row.replaceChild(CreateSelectVal(explanation, dd_code,dd_type,explanation), row.childNodes[1]);
+                row.replaceChild(CreateSelectVal(explanation, dd_code, dd_type, explanation, d), row.childNodes[1]);
             } else {
                 //普通文本
-                var input = CreateInput(dd_code,dd_type);
+                var input = CreateInput(dd_code, dd_type);
                 row.replaceChild(input[0], row.childNodes[1]);
             }
         }
@@ -222,9 +208,9 @@
      * 下拉检索框事件
      * @param k
      */
-    function selectInput(e) {
-        var _this = this;
-        var type = e.type;
+    function selectInput(u, d, event) {
+        var _this = u;
+        var type = event.type;
         var dl = _this.nextSibling;//取得下一兄弟节点，也就是dl
         switch (type) {
             case "focus":
@@ -252,7 +238,7 @@
                                 //初始化对应input结果
                                 var valInput = _this.parentNode.nextSibling.childNodes.item(0);
                                 valInput.dataset.code = "";
-                                DynamicVal(dd);//动态修改值的input
+                                DynamicVal(dd, d);//动态修改值的input
                             }
                             break;
                         }
@@ -296,17 +282,18 @@
         this.parentNode.parentNode.removeChild(row);
     }
 
-    function isEmpty(e){
-        for(var i in e){
+    function isEmpty(e) {
+        for (var i in e) {
             return false;
         }
         return true;
     }
+
     /**
      * 动态创建默认select
      * @constructor
      */
-    function CreateSelectDom() {
+    function CreateSelectDom(d) {
         var advancedsearch_content_row = document.createElement("div");
         advancedsearch_content_row.className = "advancedsearch_content_row";
         var advancedsearch_content_row_left = document.createElement("div");
@@ -326,12 +313,18 @@
         advancedsearch_select.type = "text";
         advancedsearch_select.className = "advancedsearch_select advancedsearch_ordinary";
         //检索框事件绑定
-        advancedsearch_select.addEventListener("focus", selectInput);
-        advancedsearch_select.addEventListener("blur", selectInput);
-        advancedsearch_select.addEventListener("input", selectInput);
+        advancedsearch_select.addEventListener("focus", function (event) {
+            selectInput(this, d, event)
+        });
+        advancedsearch_select.addEventListener("blur", function (event) {
+            selectInput(this, d, event)
+        });
+        advancedsearch_select.addEventListener("input", function (event) {
+            selectInput(this, d, event)
+        });
 
         var dl = document.createElement("dl");
-        var ddArray = newOptions["columns"];
+        var ddArray = d.options["columns"];
         for (var i = 0; i < ddArray.length; i++) {
             var obj = ddArray[i];
             var dd = document.createElement("dd");
@@ -362,50 +355,50 @@
      * 底部按钮事件绑定
      * @constructor
      */
-    function ControlEvent() {
-        asSearch.advancedsearch_add_btn.addEventListener("click", function () {
-            asSearch.advancedsearch_content.appendChild(CreateSelectDom());
+    function ControlEvent(d) {
+        d.view.advancedsearch_add_btn.addEventListener("click", function () {
+            d.view.advancedsearch_content.appendChild(CreateSelectDom(d));
         });
-        asSearch.advancedsearch_add_search.addEventListener("click", function () {
+        d.view.advancedsearch_add_search.addEventListener("click", function () {
             //整理所有结果(普通结果)
-            var inputs = asSearch.advancedsearch.querySelectorAll(".advancedsearch_content_row_right input.advancedsearch_ordinary");
+            var inputs = d.view.advancedsearch.querySelectorAll(".advancedsearch_content_row_right input.advancedsearch_ordinary");
             var result = [];
             for (var i = 0; i < inputs.length; i++) {
                 var input = inputs[i];
-                var obj={};
-                if (input.value != "" && input.parentNode.previousSibling.childNodes.item(0).value!="") {
+                var obj = {};
+                if (input.value != "" && input.parentNode.previousSibling.childNodes.item(0).value != "") {
                     if (input.dataset.value != "") {//选择类判断
                         //select
-                        obj["value"]=input.dataset.value;
-                        obj["code"]=input.dataset.code;
-                        obj["type"]=input.dataset.type;
-                        obj["explanation"]=input.dataset.explanation;
+                        obj["value"] = input.dataset.value;
+                        obj["code"] = input.dataset.code;
+                        obj["type"] = input.dataset.type;
+                        obj["explanation"] = input.dataset.explanation;
                     } else {
-                        obj["value"]=input.value;
-                        obj["code"]=input.dataset.code;
-                        obj["type"]=input.dataset.type;
+                        obj["value"] = input.value;
+                        obj["code"] = input.dataset.code;
+                        obj["type"] = input.dataset.type;
                     }
-                    if(!isEmpty(obj))result.push(obj);
+                    if (!isEmpty(obj)) result.push(obj);
                 }
             }
             //区间
-            var dateInputBox = asSearch.advancedsearch.querySelectorAll(".advancedsearch_content_row_right .advancedsearch_content_row_right_box");
+            var dateInputBox = d.view.advancedsearch.querySelectorAll(".advancedsearch_content_row_right .advancedsearch_content_row_right_box");
             for (var j = 0; j < dateInputBox.length; j++) {
                 var dates = dateInputBox[j].childNodes;//获取子元素集合
-                var interval = "",obj={};
+                var interval = "", obj = {};
                 for (var k = 0; k < dates.length; k++) {
                     if (dates[k].classList.contains('advancedsearch_interval')) {
-                        if (dates[k].value != "" && dates[k].parentNode.previousSibling.childNodes.item(0).value!="") {
-                            obj["code"]=dates[k].dataset.code;
-                            obj["type"]=dates[k].dataset.type;
+                        if (dates[k].value != "" && dates[k].parentNode.parentNode.previousSibling.childNodes.item(0).value != "") {
+                            obj["code"] = dates[k].dataset.code;
+                            obj["type"] = dates[k].dataset.type;
                             interval += dates[k].value + (k == 0 ? "#" : "");
                         }
                     }
                 }
                 if (interval != "") obj["value"] = interval;
-                if(!isEmpty(obj))result.push(obj);
+                if (!isEmpty(obj)) result.push(obj);
             }
-            newOptions.search(result);
+            d.options.search(result);
         });
     }
 
@@ -413,40 +406,40 @@
      * 退出事件
      * @constructor
      */
-    function CloseEvent() {
-        asSearch.advancedsearch_close.addEventListener("click", function () {
-            hide();
-            newOptions.close();//退出回调
+    function CloseEvent(d) {
+        d.view.advancedsearch_close.addEventListener("click", function () {
+            hide(d);
+            d.options.close();//退出回调
         });
     }
 
     /**
      * 隐藏窗体
      */
-    function hide() {
-        if(newOptions.shadeEnable){
-            asSearch.advancedsearch_cover.style.display = "none";
+    function hide(d) {
+        if (d.options.shadeEnable) {
+            d.view.advancedsearch_cover.style.display = "none";
         }
         // document.getElementById("advancedsearch").style.display = "none";
-        asSearch.advancedsearch.style.display="none";
+        d.view.advancedsearch.style.display = "none";
     }
 
     /**
      * 显示窗体
      */
-    function show() {
-        if(newOptions.shadeEnable){
-            asSearch.advancedsearch_cover.style.display = "block";
+    function show(d) {
+        if (d.options.shadeEnable) {
+            d.view.advancedsearch_cover.style.display = "block";
         }
         // document.getElementById("advancedsearch").style.display = "block";
-        asSearch.advancedsearch.style.display="block";
+        d.view.advancedsearch.style.display = "block";
     }
 
     /**
      * 用于创建默认框架
      * @constructor
      */
-    function DefaultBox() {
+    function DefaultBox(d) {
         var advancedsearch_cover = document.createElement("div");
         advancedsearch_cover.className = "advancedsearch_cover";
         var advancedsearch = document.createElement("div");
@@ -483,14 +476,14 @@
         advancedsearch_control.appendChild(advancedsearch_add_search);
         document.querySelector("body").appendChild(advancedsearch_cover);
         document.querySelector("body").appendChild(advancedsearch);
-        asSearch.advancedsearch=advancedsearch;
-        asSearch.advancedsearch_title_txt_span=advancedsearch_title_txt_span;
-        asSearch.advancedsearch_content=advancedsearch_content;
-        asSearch.advancedsearch_close=advancedsearch_close;
-        asSearch.advancedsearch_cover=advancedsearch_cover;
-        asSearch.advancedsearch_title=advancedsearch_title;
-        asSearch.advancedsearch_add_btn=advancedsearch_add_btn;
-        asSearch.advancedsearch_add_search=advancedsearch_add_search;
+        d.view.advancedsearch = advancedsearch;
+        d.view.advancedsearch_title_txt_span = advancedsearch_title_txt_span;
+        d.view.advancedsearch_content = advancedsearch_content;
+        d.view.advancedsearch_close = advancedsearch_close;
+        d.view.advancedsearch_cover = advancedsearch_cover;
+        d.view.advancedsearch_title = advancedsearch_title;
+        d.view.advancedsearch_add_btn = advancedsearch_add_btn;
+        d.view.advancedsearch_add_search = advancedsearch_add_search;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -505,80 +498,91 @@
         } else {
             this.targetDom = targetDom;
         }
-        //参数合并
-        var _o = newOptions = this.options = merge(defaultOptions, options);
         //默认界面
-        var view = "";
-        this.advancedsearch=null;
-        this.advancedsearch_cover=null;
-        this.advancedsearch_title_txt_span=null;
-        this.advancedsearch_content=null;
-        asSearch=this;
-        this.init();
+        this.init(options);
     }
     AsSearch.prototype = {
-        init: function () {
-            var options = this.options;
+        init: function (options) {
+            var defaultOptions = {
+                size: [700, 400],//初始弹窗宽、高
+                shadeEnable: true,//遮罩层开关
+                shade: ["#000", 0.3],//遮罩层，黑色0.3透明度
+                shadeClose: false,//点击遮罩层是否关闭
+                shadeZindex: 1000000,//遮罩层z-index，弹窗默认+1
+                title: "Advanced Search",//弹窗标题
+                columns: [],//下拉条件
+                success: function () {
+                },//弹出成功后回调
+                search: function (result) {
+                },//搜索按钮回调
+                close: function () {
+                },//关闭回调
+                dateInput: function (obj, dateformat) {
+                }//input -> date回调
+            };
+            this.view = {}
+            options = this.options = merge(defaultOptions, options);
             //检查框架是否存在
-            if (!asSearch.advancedsearch) {
-                DefaultBox();
+            if (!this.hasOwnProperty("view") || !this["view"].hasOwnProperty("advancedsearch")) {
+                DefaultBox(this);
             }
             //配置标题
-            asSearch.advancedsearch_title_txt_span.innerHTML = options.title;
+            this.view.advancedsearch_title_txt_span.innerHTML = options.title;
             //z-index配置
-            asSearch.advancedsearch.style.zIndex = options.shadeZindex + 1;
-            asSearch.advancedsearch_cover.style.zIndex = options.shadeZindex;
+            this.view.advancedsearch.style.zIndex = options.shadeZindex + 1;
+            this.view.advancedsearch_cover.style.zIndex = options.shadeZindex;
             //遮罩层点击事件
-            if(options.shadeClose){
+            if (options.shadeClose) {
 
             }
             //窗体大小及位置
-            var advancedsearch = this.advancedsearch;
-            advancedsearch.style.width = options.size[0] / 16 + "rem";
-            advancedsearch.style.height = options.size[1] / 16 + "rem";
-            advancedsearch.style.left = "calc(50% - " + (this.options.size[0] / 16 / 2) + "rem)";
-            advancedsearch.style.top = "calc(50% - " + (this.options.size[1] / 16 / 2) + "rem)";
+            var advancedsearch = this.view.advancedsearch;
+            advancedsearch.style.width = options.size[0] + "px";
+            advancedsearch.style.height = options.size[1] + "px";
+            advancedsearch.style.left = "calc(50% - " + (this.options.size[0] / 2) + "px)";
+            advancedsearch.style.top = "calc(50% - " + (this.options.size[1] / 2) + "px)";
             //遮罩层颜色及透明度
-            asSearch.advancedsearch_cover.style.backgroundColor = options.shade[0];
-            asSearch.advancedsearch_cover.style.opacity = options.shade[1];
+            this.view.advancedsearch_cover.style.backgroundColor = options.shade[0];
+            this.view.advancedsearch_cover.style.opacity = options.shade[1];
             //添加默认条件
-            asSearch.advancedsearch_content.appendChild(CreateSelectDom());
+            this.view.advancedsearch_content.appendChild(CreateSelectDom(this));
             //初始化事件监听
             this.event();
         },
         event: function () {
+            var _this = this;
             //用户触发按钮
-            FormMove();//窗体移动
-            ControlEvent();//底部按钮事件绑定
-            CloseEvent();//退出事件
+            FormMove(this);//窗体移动
+            ControlEvent(this);//底部按钮事件绑定
+            CloseEvent(this);//退出事件
             /**
              * 用户绑定元素
              */
             this.targetDom.addEventListener("click", function () {
-                show();
+                show(_this);
             });
             this.options.success();//成功回调
         },
         remove: function () {
             //清理痕迹
-            document.querySelector("body").removeChild(asSearch.advancedsearch_cover);
-            document.querySelector("body").removeChild(asSearch.advancedsearch);
+            document.querySelector("body").removeChild(this.view.advancedsearch_cover);
+            document.querySelector("body").removeChild(this.view.advancedsearch);
         },
         /**
          * 重新渲染
          */
         render: function () {
             this.remove();
-            this.init();
+            this.init(this.options);
         },
         /**
          * 隐藏窗体
          */
         hide: function () {
-            hide();
+            hide(this);
         },
         show: function () {
-            show();
+            show(this);
         }
     }
     window.AsSearch = AsSearch;//暴露方法

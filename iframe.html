@@ -9,7 +9,7 @@
 <button id="ifbtn">iframe调用示例</button>
 <script>
     var btn = document.getElementById("ifbtn");
-    var as = window.parent.AsSearch(btn, {
+    var as =new window.parent.AsSearch(btn, {
             columns: [
                 {
                     title: "性别",
@@ -37,20 +37,9 @@
                 alert("结果：\n" + JSON.stringify(result));
                 console.log("结果：" + JSON.stringify(result));
             },
-            shadeEnable: false,
+            title:"1111",
+            shadeEnable: true,
             dateInput: function (obj, dateFormat) {
-                //data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1"
-//            $(obj).attr({"data-date-format": "yyyy-MM-dd HH:MM:SS"});
-//            $(obj).datetimepicker({
-//                //language:  'fr',
-//                weekStart: 1,
-//                todayBtn: 1,
-//                autoclose: 1,
-//                todayHighlight: 1,
-//                startView: 2,
-//                forceParse: 0,
-//                showMeridian: 1
-//            });
             }
         });
 </script>
