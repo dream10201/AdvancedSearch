@@ -1,6 +1,6 @@
 # AdvancedSearch
 # 文档
-<a href="/xizirumeng/AdvancedSearch/wiki">文档</a>
+<a href="https://github.com/xizirumeng/AdvancedSearch/wiki">文档</a>
 
 ![示例](iframe.gif)
 # 使用
