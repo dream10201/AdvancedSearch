@@ -10,12 +10,6 @@
 ```
 <link rel="stylesheet" href="/AdvancedSearch.css">
 ```
-需要注意的是，AdvancedSearch会将所在环境<html>标签中的字体大小更改为
-```
-font-size: medium;//默认字体大小
-```
-<font color="red">这可能导致你的整体布局错乱</font>
-
 * 引入AdvancedSearch脚本文件
 ```
 <script src="/AdvancedSearch.js"></script>
