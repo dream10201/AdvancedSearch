@@ -45,9 +45,9 @@ var as = new AsSearch("#btn", {//绑定id为btn的元素，当该元素发生点
         },
         dateInput: function (obj,dateFormat) {
         //date类型的input需要单独初始化，这取决于你的框架
-        //obj为input对象数组，dateFormat为格式化参数
-
+        //obj为input对象，dateFormat为格式化参数
         //bootstrap table例：
+        
 //            $(obj).attr({"data-date-format": dateFormat});
 //            $(obj).datetimepicker({
 //                //language:  'fr',
