@@ -2,7 +2,6 @@
 # 文档
 <a href="/xizirumeng/AdvancedSearch/wiki/%E6%96%87%E6%A1%A3">文档</a>
 
-这是一个data table的多条件查询插件，简而言之就是可以将所有字段作为条件查询
 ![示例](iframe.gif)
 # 使用
 
