@@ -28,10 +28,10 @@
             y = e.clientY;
             isMove = true;
         }, false);
-        d.view.advancedsearch.addEventListener("mouseup", function () {
+        window.addEventListener("mouseup", function () {
             isMove = false;
         }, false);
-        d.view.advancedsearch.addEventListener("mousemove", function (e) {
+        window.addEventListener("mousemove", function (e) {
             if (isMove) {
                 //移动窗体
                 var mx = e.clientX;
@@ -68,13 +68,11 @@
     }
 
     /**
-     * 下拉dd事件绑定
+     * 下拉dd鼠标按下事件绑定
      */
-    function ddClick() {
+    function ddMousedown() {
         var _this = this;
-        //this -> Superior -> Previous brothers
         this.parentNode.previousSibling.value = _this.innerHTML;
-        // DynamicVal(_this);//动态修改值的input
     }
 
     /**
@@ -110,7 +108,7 @@
             var dd = document.createElement("dd");
             dd.innerHTML = i;
             dd.dataset.value = explanation[i];
-            dd.addEventListener("click", ddClick);
+            dd.addEventListener("mousedown", ddMousedown);
             dl.appendChild(dd);
         }
         //组装
@@ -143,7 +141,7 @@
     /**
      * 创建时间区间
      * @param code
-     * @returns {[null,null]}
+     * @returns element
      * @constructor
      */
     function CreateDateInputs(code, type, dateformat) {
@@ -155,7 +153,6 @@
         dateBox.className = "advancedsearch_content_row_right_box";
         var span = document.createElement("span");
         span.innerHTML = "&nbsp;-&nbsp;";
-        var inputs = [];
         for (var i = 0; i < 2; i++) {
             var advancedsearch_val = document.createElement("input");
             advancedsearch_val.className = "advancedsearch_val advancedsearch_interval";
@@ -166,11 +163,10 @@
             advancedsearch_val.type = "text";
             if (i == 1) dateBox.appendChild(span);
             dateBox.appendChild(advancedsearch_val);
-            inputs.push(advancedsearch_val);
         }
 
         advancedsearch_content_row_right.appendChild(dateBox);
-        return [advancedsearch_content_row_right, inputs];
+        return advancedsearch_content_row_right;
     }
 
     /**
@@ -186,9 +182,10 @@
         dd_type = dd_type.toLowerCase();
         if (dd_type == "date" || dd_type == "timestamp" || dd_type == "datetime" || dd_type == "time") {
             //时间类型
-            var input = CreateDateInputs(dd_code, dd_type, dd.dataset.dateformat);
-            row.replaceChild(input[0], row.childNodes[1]);
-            d.options.dateInput(input[1], dd.dataset.dateformat);//回调
+            var right_element = CreateDateInputs(dd_code, dd_type, dd.dataset.dateformat);
+            row.replaceChild(right_element, row.childNodes[1]);
+            //添加至页面后回调
+            d.options.dateInput(row.querySelectorAll("input"), dd.dataset.dateformat);
         } else {
             //下拉框或者普通文本类型
             if ((typeof dd.dataset.explanation) != "undefined" && dd.dataset.explanation != "") {
@@ -217,41 +214,38 @@
                 dl.style.display = "block";
                 break;
             case "blur":
-                //防止与dd选择事件冲突
-                setTimeout(function () {
-                    var val = _this.value;
-                    //获取所有子节点nodes
-                    var dds = dl.childNodes;
-                    var isexist = false;
+                var val = _this.value;
+                //获取所有子节点nodes
+                var dds = dl.childNodes;
+                var isexist = false;
+                for (var i = 0; i < dds.length; i++) {
+                    var dd = dds.item(i);
+                    if (dd.innerHTML == val) {
+                        isexist = true;
+                        var ddVal = dd.dataset.value;
+                        if ((typeof ddVal) != "undefined" && ddVal != null && ddVal != "") {
+                            _this.dataset.value = ddVal;
+                        } else {
+                            _this.dataset.value = "";
+                        }
+                        //判断是否为右边select
+                        if (dl.parentNode.dataset.align != "right") {
+                            //初始化对应input结果
+                            var valInput = _this.parentNode.nextSibling.childNodes.item(0);
+                            valInput.dataset.code = "";
+                            DynamicVal(dd, d);//动态修改值的input
+                        }
+                        break;
+                    }
+                }
+                if (!isexist) {
+                    _this.value = "";
                     for (var i = 0; i < dds.length; i++) {
-                        var dd = dds.item(i);
-                        if (dd.innerHTML == val) {
-                            isexist = true;
-                            var ddVal = dd.dataset.value;
-                            if ((typeof ddVal) != "undefined" && ddVal != null && ddVal != "") {
-                                _this.dataset.value = ddVal;
-                            } else {
-                                _this.dataset.value = "";
-                            }
-                            //判断是否为右边select
-                            if (dl.parentNode.dataset.align != "right") {
-                                //初始化对应input结果
-                                var valInput = _this.parentNode.nextSibling.childNodes.item(0);
-                                valInput.dataset.code = "";
-                                DynamicVal(dd, d);//动态修改值的input
-                            }
-                            break;
-                        }
+                        dds.item(i).style.display = "block";
                     }
-                    if (!isexist) {
-                        _this.value = "";
-                        for (var i = 0; i < dds.length; i++) {
-                            dds.item(i).style.display = "block";
-                        }
-                    }
-                    //隐藏dl
-                    dl.style.display = "none";
-                }, 150);
+                }
+                //隐藏dl
+                dl.style.display = "none";
                 break;
             case "input":
                 var dds = dl.childNodes;
@@ -335,7 +329,7 @@
             if (obj.hasOwnProperty("explanation")) dd.dataset.explanation = JSON.stringify(obj["explanation"]);
             if (obj.hasOwnProperty("dateformat")) dd.dataset.dateformat = obj["dateformat"];
             //dd事件绑定
-            dd.addEventListener("click", ddClick);
+            dd.addEventListener("mousedown", ddMousedown);
             dl.appendChild(dd);
         }
         //组合
@@ -420,7 +414,6 @@
         if (d.options.shadeEnable) {
             d.view.advancedsearch_cover.style.display = "none";
         }
-        // document.getElementById("advancedsearch").style.display = "none";
         d.view.advancedsearch.style.display = "none";
     }
 
@@ -431,7 +424,6 @@
         if (d.options.shadeEnable) {
             d.view.advancedsearch_cover.style.display = "block";
         }
-        // document.getElementById("advancedsearch").style.display = "block";
         d.view.advancedsearch.style.display = "block";
     }
 
@@ -517,7 +509,9 @@
                 },//搜索按钮回调
                 close: function () {
                 },//关闭回调
-                dateInput: function (obj, dateformat) {
+                dateInput: function (inputs, dateformat) {
+                    //inputs -> input element array
+                    //dateformat -> date format string
                 }//input -> date回调
             };
             this.view = {}
@@ -533,7 +527,10 @@
             this.view.advancedsearch_cover.style.zIndex = options.shadeZindex;
             //遮罩层点击事件
             if (options.shadeClose) {
-
+                var _this = this;
+                this.view.advancedsearch_cover.addEventListener("click",function(){
+                    hide(_this);
+                })
             }
             //窗体大小及位置
             var advancedsearch = this.view.advancedsearch;
