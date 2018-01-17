@@ -19,7 +19,7 @@
     text-decoration: none;
     text-overflow: ellipsis;
     font-size: 14px;
-    /*font-family: "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "\9ED1\4F53", Arial, sans-serif;*/
+    font-family: "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "\9ED1\4F53", Arial, sans-serif;
 }
 
 .advancedsearch a, button {

@@ -1,7 +1,6 @@
 # AdvancedSearch
 # 文档
 <a href="https://github.com/xizirumeng/AdvancedSearch/wiki">文档</a>
-
 ![示例](iframe.gif)
 # 使用
 
@@ -43,13 +42,13 @@ var as = new AsSearch("#btn", {//绑定id为btn的元素，当该元素发生点
             alert("结果：\n"+JSON.stringify(result));
             console.log("结果："+ JSON.stringify(result));
         },
-        dateInput: function (obj,dateFormat) {
+        dateInput: function (,dateFormat) {
         //date类型的input需要单独初始化，这取决于你的框架
-        //obj为input对象，dateFormat为格式化参数
+        //inputs为一个input元素数组，一般为两个
         //bootstrap table例：
-        
-//            $(obj).attr({"data-date-format": dateFormat});
-//            $(obj).datetimepicker({
+        $(inputs[0]).attr({"data-date-format": dateFormat});
+        $(inputs[1]).attr({"data-date-format": dateFormat});
+//            $(inputs[0]).datetimepicker({
 //                //language:  'fr',
 //                weekStart: 1,
 //                todayBtn: 1,
@@ -59,6 +58,7 @@ var as = new AsSearch("#btn", {//绑定id为btn的元素，当该元素发生点
 //                forceParse: 0,
 //                showMeridian: 1
 //            });
+//              ...
         }
     });
 ```
